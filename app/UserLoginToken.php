@@ -31,8 +31,13 @@ class UserLoginToken extends Model
 	}
 
 	public function belongsToEmail($email)
-  {
-  	return (bool) ($this->user->where('email',$email)->count() === 1) ;
-  }
+	{
+		return (bool) ($this->user->where('email',$email)->count() === 1) ;
+	}
+
+	public function scopeExpired($query)
+	{
+		return $query->where('created_at','<',Carbon::now()->subSeconds(self::TOKEN_EXIPRY));
+	}
 
 }
